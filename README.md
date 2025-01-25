@@ -2,9 +2,9 @@
 Terraform block for aws docker 3 tier web application
 
 
-#Terraform folder structure
+# Terraform folder structure
 
-```
+`
 ├── network/
 │   ├── main.tf
 │   ├── variables.tf
@@ -13,4 +13,4 @@ Terraform block for aws docker 3 tier web application
     ├── main.tf
     ├── variables.tf
     └── outputs.tf
-``
+`
