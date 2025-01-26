@@ -19,6 +19,8 @@ resource "aws_instance" "app_server" {
               yum install -y docker
               systemctl start docker
               systemctl enable docker
+              sudo usermod -aG docker ec2-user
+              sudo systemctl restart docker
               EOF
   
   tags = {
@@ -26,6 +28,15 @@ resource "aws_instance" "app_server" {
     Environment = var.environment
   }
 }
+
+
+resource "aws_key_pair" "vm_key" {
+  key_name   = var.prefix
+  public_key = file("${var.prefix}.pub")
+}
+# ssh-keygen -t rsa -f docker-ecr
+# chmod 400 docker-ecr
+# ssh -i non-prod ec2-user@<private ip>
 
 resource "aws_security_group" "allow_web" {
   name        = "${var.prefix}-allow-web"
