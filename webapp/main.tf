@@ -61,8 +61,17 @@ resource "aws_security_group" "allow_web" {
   }
 }
 
-resource "aws_ecr_repository" "ecr_repo" {
-  name                 = "docker_ecr"
+resource "aws_ecr_repository" "app_repo" {
+  name                 = "application"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+resource "aws_ecr_repository" "mysql_repo" {
+  name                 = "mysql"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
