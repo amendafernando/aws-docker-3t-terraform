@@ -21,6 +21,9 @@ resource "aws_instance" "app_server" {
               systemctl enable docker
               sudo usermod -aG docker ec2-user
               sudo systemctl restart docker
+              yum install -y curl git
+              curl -Lo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
+              chmod +x /usr/local/bin/kind
               EOF
   
   tags = {
