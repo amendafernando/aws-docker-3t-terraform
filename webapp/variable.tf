@@ -20,7 +20,7 @@ variable "project_name" {
 variable "ingress_ports" {
   description = "List of ingress ports"
   type        = list(number)
-  default     = [22, 8081, 8082, 8083]
+  default     = [22, 8081, 8082, 8083, 30000]
 }
 
 variable "prefix" {

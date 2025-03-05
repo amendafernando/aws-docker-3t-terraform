@@ -23,31 +23,23 @@ resource "aws_instance" "app_server" {
               #!/bin/bash
               # Update packages
               yum update -y
-
               # Install Docker
               yum install -y docker
-              systemctl start docker
-              systemctl enable docker
-
               # Install dependencies
               yum install -y curl git
-
               # Install Kind
-              curl -Lo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
-              chmod +x /usr/local/bin/kind
-
+              curl -sLo ./kind https://kind.sigs.k8s.io/dl/v0.26.0/kind-linux-amd64
+              chmod +x ./kind
+              sudo mv ./kind /usr/local/bin/
               # Install kubectl
-              curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-              chmod +x kubectl
-              mv kubectl /usr/local/bin/
-
-              # Verify installations
-              kind version
-              kubectl version --client
-              
+              curl -LO https://dl.k8s.io/release/v1.29.13/bin/linux/amd64/kubectl 
+              chmod +x ./kubectl
+              sudo mv ./kubectl /usr/local/bin/
               # Start Docker at boot
+              # systemctl enable docker
+              # systemctl restart docker
+              systemctl start docker
               systemctl enable docker
-              systemctl restart docker
               EOF
 
   tags = {
