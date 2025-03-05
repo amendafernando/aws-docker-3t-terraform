@@ -25,6 +25,7 @@ resource "aws_instance" "app_server" {
               yum update -y
               # Install Docker
               yum install -y docker
+              systemctl start docker
               # Install dependencies
               yum install -y curl git
               # Install Kind
@@ -35,11 +36,12 @@ resource "aws_instance" "app_server" {
               curl -LO https://dl.k8s.io/release/v1.29.13/bin/linux/amd64/kubectl 
               chmod +x ./kubectl
               sudo mv ./kubectl /usr/local/bin/
+              sudo yum install -y git
               # Start Docker at boot
-              # systemctl enable docker
-              # systemctl restart docker
-              systemctl start docker
               systemctl enable docker
+              systemctl restart docker
+              # systemctl start docker
+              # systemctl enable docker
               EOF
 
   tags = {
