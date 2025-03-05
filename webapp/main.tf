@@ -13,6 +13,12 @@ resource "aws_instance" "app_server" {
   subnet_id     = data.terraform_remote_state.remote_data.outputs.subnet_id
   vpc_security_group_ids = [aws_security_group.allow_web.id]
   associate_public_ip_address = true
+
+  root_block_device {
+    volume_size = 14
+    volume_type = "gp2"
+  }
+
     user_data = <<-EOF
               #!/bin/bash
               # Update packages
