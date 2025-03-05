@@ -13,19 +13,37 @@ resource "aws_instance" "app_server" {
   subnet_id     = data.terraform_remote_state.remote_data.outputs.subnet_id
   vpc_security_group_ids = [aws_security_group.allow_web.id]
   associate_public_ip_address = true
-  user_data = <<-EOF
+    user_data = <<-EOF
               #!/bin/bash
+              # Update packages
               yum update -y
+
+              # Install Docker
               yum install -y docker
               systemctl start docker
               systemctl enable docker
-              sudo usermod -aG docker ec2-user
-              sudo systemctl restart docker
+
+              # Install dependencies
               yum install -y curl git
+
+              # Install Kind
               curl -Lo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
               chmod +x /usr/local/bin/kind
+
+              # Install kubectl
+              curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+              chmod +x kubectl
+              mv kubectl /usr/local/bin/
+
+              # Verify installations
+              kind version
+              kubectl version --client
+              
+              # Start Docker at boot
+              systemctl enable docker
+              systemctl restart docker
               EOF
-  
+
   tags = {
     Name = "${var.project_name}-server"
     Environment = var.environment
