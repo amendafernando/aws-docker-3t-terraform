@@ -25,6 +25,7 @@ resource "aws_instance" "app_server" {
               yum update -y
               # Install Docker
               yum install -y docker
+              sudo usermod -aG docker $USER
               systemctl start docker
               # Install dependencies
               yum install -y curl git
