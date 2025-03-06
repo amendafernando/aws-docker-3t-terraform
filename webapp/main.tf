@@ -25,8 +25,9 @@ resource "aws_instance" "app_server" {
               yum update -y
               # Install Docker
               yum install -y docker
-              sudo usermod -aG docker $USER
               systemctl start docker
+              systemctl enable docker
+              usermod -aG docker ec2-user
               # Install dependencies
               yum install -y curl git
               # Install Kind
@@ -38,11 +39,6 @@ resource "aws_instance" "app_server" {
               chmod +x ./kubectl
               sudo mv ./kubectl /usr/local/bin/
               sudo yum install -y git
-              # Start Docker at boot
-              systemctl enable docker
-              systemctl restart docker
-              # systemctl start docker
-              # systemctl enable docker
               EOF
 
   tags = {
